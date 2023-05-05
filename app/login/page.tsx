@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { useAuth } from "../providers/auth";
+import { useAuth } from "~/providers/auth";
 
 export default function Auth() {
   const [input, setInput] = React.useState({ email: "", password: "" });
