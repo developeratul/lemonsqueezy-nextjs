@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useAuth } from "../providers/auth";
+import { useAuth } from "~/providers/auth";
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
