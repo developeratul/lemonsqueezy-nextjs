@@ -1,6 +1,8 @@
 import { Inter } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import { cn } from "~/lib/utils";
 import "./globals.css";
+import AuthProvider from "./providers/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,7 +14,12 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className)}>{children}</body>
+      <body className={cn(inter.className)}>
+        <Toaster />
+        <main className="min-h-screen flex flex-col justify-center items-center">
+          <AuthProvider>{children}</AuthProvider>
+        </main>
+      </body>
     </html>
   );
 }
