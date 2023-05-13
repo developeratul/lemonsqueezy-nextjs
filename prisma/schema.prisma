@@ -18,7 +18,7 @@ model User {
   // lemonsqueezy subscription stuff
   customerId       String?   @unique
   subscriptionId   String?   @unique
-  variantId        Int?      @unique
+  variantId        Int?
   currentPeriodEnd DateTime?
 
   createdAt DateTime @default(now())
