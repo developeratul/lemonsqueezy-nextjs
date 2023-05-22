@@ -32,6 +32,7 @@ export default function SignUp() {
       });
 
       setUser(user);
+      document.cookie = `userId=${user?.id}`;
       router.push("/");
       toast.success(message);
     } catch (err) {

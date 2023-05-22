@@ -1,40 +1,32 @@
-"use client";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { Button } from "~/components/ui/button";
-import { axios } from "~/lib/axios";
-import { useAuth } from "~/providers/auth";
-import { CreateCheckoutResponse } from "./api/payment/subscribe/route";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { getUserSubscriptionPlan } from "~/lib/subscription";
+import ManageSubscription from "./ManageSubscription";
+import SubscribeButton from "./SubscribeButton";
 
-export default function Home() {
-  const { isAuthenticated, user } = useAuth();
-  const router = useRouter();
+export default async function Home() {
+  const cookiesList = cookies();
+  const userId = cookiesList.get("userId")?.value || "";
 
-  React.useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/login");
-    }
-  }, [isAuthenticated, router]);
+  if (!userId) return redirect("/login");
 
-  if (!isAuthenticated || !user) return <></>;
-
-  const handleClick = async () => {
-    try {
-      const { checkoutURL } = await axios.post<any, CreateCheckoutResponse>(
-        "/api/payment/subscribe",
-        { userId: user.id }
-      );
-      window.location.href = checkoutURL;
-    } catch (err) {
-      //
-    }
-  };
+  const { isPro, isCanceled, currentPeriodEnd, updatePaymentMethodURL } =
+    await getUserSubscriptionPlan(userId);
 
   return (
     <div className="w-full max-w-md bg-white/5 border border-gray-900 p-8 rounded-lg">
       <div className="flex flex-col gap-4">
         <h2 className="text-2xl">Your profile</h2>
-        <Button onClick={handleClick}>Subscribe</Button>
+        {isPro ? (
+          <ManageSubscription
+            userId={userId}
+            isCanceled={isCanceled}
+            currentPeriodEnd={currentPeriodEnd}
+            updatePaymentMethodURL={updatePaymentMethodURL}
+          />
+        ) : (
+          <SubscribeButton />
+        )}
       </div>
     </div>
   );
